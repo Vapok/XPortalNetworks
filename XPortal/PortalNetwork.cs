@@ -113,7 +113,7 @@ namespace XPortal
         }
 
         /// <summary>
-        /// Resolves a display name from character ZDOs, the ESC player list (including server-assigned names), then peers.
+        /// Resolves a display name from character ZDOs, the ESC player list, then peers.
         /// </summary>
         internal static string TryResolveByWorldState(long ownerPlayerId)
         {
@@ -147,11 +147,6 @@ namespace XPortal
                 if (characterZdo == null || characterZdo.GetLong(ZDOVars.s_playerID) != ownerPlayerId)
                 {
                     continue;
-                }
-
-                if (!string.IsNullOrEmpty(info.m_serverAssignedDisplayName))
-                {
-                    return info.m_serverAssignedDisplayName.Trim();
                 }
 
                 if (!string.IsNullOrEmpty(info.m_name))
