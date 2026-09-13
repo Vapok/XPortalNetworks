@@ -3,18 +3,19 @@
 **XPortal Networks** is a Valheim mod that overhauls the vanilla portal system. Instead of being restricted to matching identical portal tags or constructing massive portal hubs, XPortal Networks lets you select any portal's destination directly from an interactive list—now featuring an expanded **Portal Networks** system with Public, Private, and Custom Named Networks!
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/Vapok/XPortalNetworks/main/images/controller.gif" alt="XPortal Networks in Action" height="180" />
+  <b>XPortal Networks</b><br />
+  <img src="https://raw.githubusercontent.com/Vapok/XPortalNetworks/refs/heads/main/images/XPortal%20Networks%20Window.png" alt="XPortal Networks" height="180" />
 </p>
 
----
+<p align="center">
+  <b>Network Selection Window</b><br />
+  <img src="https://raw.githubusercontent.com/Vapok/XPortalNetworks/refs/heads/main/images/Portal%20Network%20Window.png" alt="Network Selection Window" height="180" />
+</p>
 
-## Where to Download
-
-<div align="center">
-
-[![Nexus Mods](https://raw.githubusercontent.com/SpikeHimself/resources/main/images/thirdparty/nexus-logo-small.png)](https://www.nexusmods.com/valheim/mods/2239) &nbsp;&nbsp;&nbsp; [![Thunderstore](https://raw.githubusercontent.com/SpikeHimself/resources/main/images/thirdparty/thunderstore-logo-small.png)](https://valheim.thunderstore.io/package/Vapok/XPortalNetworks/)
-
-</div>
+<p align="center">
+  <b>Destination Network Selection</b><br />
+  <img src="https://raw.githubusercontent.com/Vapok/XPortalNetworks/refs/heads/main/images/Destination%20Portals%20with%20Private.png" alt="Destination Network Selection" height="180" />
+</p>
 
 ---
 
@@ -61,10 +62,6 @@ Forgot where a portal leads? Click the **Ping** button to highlight the destinat
 
 ### 🎮 Full Gamepad & Controller Support
 Fully navigable using controllers with integrated on-screen key hints:
-
-<p align="center">
-  <img src="https://raw.githubusercontent.com/Vapok/XPortalNetworks/main/images/ui-keyhints-small.png" alt="Gamepad Keyhints" />
-</p>
 
 | Button (Xbox / PlayStation) | Action |
 | :--- | :--- |
@@ -154,5 +151,4 @@ Use a mod manager like **r2modman** or **Vortex** to download and install XPorta
 ## Credits & Acknowledgements
 
 * **[SpikeHimself](https://github.com/SpikeHimself)**: Creator of the original **XPortal** mod, upon which XPortal Networks is built and expanded.
-* **[sweetgiorni](https://valheim.thunderstore.io/package/sweetgiorni/AnyPortal/)**: Creator of the original AnyPortal concept.
 * **Translations & Community**: Thanks to *kaiqueknup*, *makou*, *Smok3y97*, *MexExe*, *hanawa07*, *bonesbro*, *VasariRulez*, *Felix*, and *cawa-93* for original translations and community contributions.
