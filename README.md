@@ -19,16 +19,6 @@
 
 ---
 
-## Where to Download
-
-<div align="center">
-
-[![Nexus Mods](https://raw.githubusercontent.com/SpikeHimself/resources/main/images/thirdparty/nexus-logo-small.png)](https://www.nexusmods.com/valheim/mods/2239) &nbsp;&nbsp;&nbsp; [![Thunderstore](https://raw.githubusercontent.com/SpikeHimself/resources/main/images/thirdparty/thunderstore-logo-small.png)](https://valheim.thunderstore.io/package/Vapok/XPortalNetworks/)
-
-</div>
-
----
-
 ## What's New in XPortal Networks
 
 XPortal Networks builds upon the solid foundation of the original XPortal mod by SpikeHimself, expanding it into a dedicated networking framework with extensive multiplayer features and numerous bug fixes:
