@@ -47,7 +47,7 @@ namespace XPortalNetworks.UI
         // Creating the UI was incredibly painful. I will never change the layout again. Ever.
         // ...but we can use some variables to tweak widths, heights, offsets, and such
 
-        // Essentially it's something like this:
+        // Modifying it anyway to add one dropdown row:
 
         //////////////////////////////////////////
         //               {header}               //
@@ -107,11 +107,7 @@ namespace XPortalNetworks.UI
         private long selectedDestinationNetworkOwnerId;
         private bool canEditNetworkAssignment;
         private bool canEditPortalFully;
-        private long personalNetworkOwnerId;
         private bool readOnlyPrivatePortal;
-
-        /// <summary>Piece creator id; personal network row uses this owner (e.g. admin editing another player's portal).</summary>
-        private long pieceCreatorPlayerId;
 
         #region Input Button Configs
         private ButtonConfig uiDropdownScrollUpButton;
@@ -802,20 +798,6 @@ namespace XPortalNetworks.UI
             canEditNetworkAssignment = canEditNetwork;
             this.canEditPortalFully = canEditPortalFully;
             readOnlyPrivatePortal = portal.IsPrivate && !canEditPortalFully;
-            pieceCreatorPlayerId = 0L;
-            if (ZDOMan.instance != null)
-            {
-                var portalZdo = ZDOMan.instance.GetZDO(portal.Id);
-                if (portalZdo != null)
-                {
-                    pieceCreatorPlayerId = portalZdo.GetLong(ZDOVars.s_creator);
-                }
-            }
-
-            var localPlayerId = Player.m_localPlayer != null
-                ? Player.m_localPlayer.GetPlayerID()
-                : Game.instance.GetPlayerProfile().GetPlayerID();
-            personalNetworkOwnerId = pieceCreatorPlayerId != 0L ? pieceCreatorPlayerId : localPlayerId;
 
             portalNameInputField.text = portal.Name;
             selectedTargetId = portal.Target;
@@ -945,7 +927,6 @@ namespace XPortalNetworks.UI
             var localPlayerId = Player.m_localPlayer != null
                 ? Player.m_localPlayer.GetPlayerID()
                 : Game.instance.GetPlayerProfile().GetPlayerID();
-            var personalNetworkOwnerId = pieceCreatorPlayerId != 0L ? pieceCreatorPlayerId : localPlayerId;
 
             var index = -1;
 
@@ -958,13 +939,23 @@ namespace XPortalNetworks.UI
                 networkAssignmentIndexToOwnerId.Add(++index, customId);
             }
 
-            networkAssignmentDropdown.options.Add(new Dropdown.OptionData(PortalNetwork.FormatNetworkLabel(personalNetworkOwnerId)));
-            networkAssignmentIndexToOwnerId.Add(++index, personalNetworkOwnerId);
+            networkAssignmentDropdown.options.Add(new Dropdown.OptionData(PortalNetwork.FormatNetworkLabel(localPlayerId)));
+            networkAssignmentIndexToOwnerId.Add(++index, localPlayerId);
             personalNetworkAssignmentIndex = index;
+
+            // If the portal currently belongs to another personal network (e.g. admin editing another player's portal)
+            if (thisPortal.NetworkOwnerPlayerId != 0L
+                && thisPortal.NetworkOwnerPlayerId != localPlayerId
+                && !CustomNetworks.IsReservedIdRange(thisPortal.NetworkOwnerPlayerId))
+            {
+                networkAssignmentDropdown.options.Add(new Dropdown.OptionData(PortalNetwork.FormatNetworkLabel(thisPortal.NetworkOwnerPlayerId)));
+                networkAssignmentIndexToOwnerId.Add(++index, thisPortal.NetworkOwnerPlayerId);
+            }
 
             if (thisPortal.IsPrivate)
             {
-                networkAssignmentDropdown.value = personalNetworkAssignmentIndex;
+                var matchIdx = FindNetworkAssignmentDropdownIndex(thisPortal.NetworkOwnerPlayerId);
+                networkAssignmentDropdown.value = matchIdx >= 0 ? matchIdx : personalNetworkAssignmentIndex;
             }
             else
             {
@@ -984,12 +975,9 @@ namespace XPortalNetworks.UI
                 return;
             }
 
-            var localPlayerId = Player.m_localPlayer != null
-                ? Player.m_localPlayer.GetPlayerID()
-                : Game.instance.GetPlayerProfile().GetPlayerID();
-            var personalId = pieceCreatorPlayerId != 0L ? pieceCreatorPlayerId : localPlayerId;
+            var isPersonalNetwork = ownerId != 0L && !CustomNetworks.IsReservedIdRange(ownerId);
 
-            if (ownerId != personalId && privatePortalToggle.isOn)
+            if (!isPersonalNetwork && privatePortalToggle.isOn)
             {
                 privatePortalToggle.SetIsOnWithoutNotify(false);
             }
@@ -1000,15 +988,6 @@ namespace XPortalNetworks.UI
             if (!canEditNetworkAssignment)
             {
                 return thisPortal.NetworkOwnerPlayerId;
-            }
-
-            var localPlayerId = Player.m_localPlayer != null
-                ? Player.m_localPlayer.GetPlayerID()
-                : Game.instance.GetPlayerProfile().GetPlayerID();
-            var personalId = pieceCreatorPlayerId != 0L ? pieceCreatorPlayerId : localPlayerId;
-
-            if (privatePortalToggle.isOn && !defaultPortalToggle.isOn)
-            {
             }
 
             if (!networkAssignmentIndexToOwnerId.TryGetValue(networkAssignmentDropdown.value, out var ownerId))

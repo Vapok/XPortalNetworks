@@ -449,13 +449,13 @@ namespace XPortalNetworks
             var localPlayerId = Player.m_localPlayer != null
                 ? Player.m_localPlayer.GetPlayerID()
                 : Game.instance.GetPlayerProfile().GetPlayerID();
-            var portalZdo = ZDOMan.instance != null ? ZDOMan.instance.GetZDO(portal.Id) : null;
-            var pieceCreator = portalZdo != null ? portalZdo.GetLong(ZDOVars.s_creator) : 0L;
 
             var effectiveNetworkId = networkOwnerPlayerId;
             if (isPrivate)
             {
-                effectiveNetworkId = pieceCreator != 0L ? pieceCreator : localPlayerId;
+                effectiveNetworkId = (networkOwnerPlayerId != 0L && !CustomNetworks.IsReservedIdRange(networkOwnerPlayerId))
+                    ? networkOwnerPlayerId
+                    : localPlayerId;
             }
 
             var networkOwnerDisplayName = portal.NetworkOwnerDisplayName ?? string.Empty;
@@ -469,7 +469,7 @@ namespace XPortalNetworks
                     ? customLabel
                     : string.Empty;
             }
-            else if (pieceCreator != 0L && localPlayerId == pieceCreator)
+            else if (effectiveNetworkId == localPlayerId)
             {
                 var fromPlayer = Player.m_localPlayer != null
                     ? Player.m_localPlayer.GetPlayerName()

@@ -186,7 +186,7 @@
     <Target Name="Copy" AfterTargets="Build" Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
         <ItemGroup>
             <TranslationFiles Include="$(MSBuildProjectDirectory)/Translations/**/*.*" />
-            <PackageDocs Include="$(SolutionDir)LICENSE;$(SolutionDir)Docs/SolutionDir/Package/Release/manifest.json;$(SolutionDir)Docs/SolutionDir/Package/Release/CHANGELOG.md;$(SolutionDir)Docs/SolutionDir/Package/Release/README.md;$(SolutionDir)images/icon.png" />
+            <PackageDocs Include="$(SolutionDir)LICENSE;$(SolutionDir)manifest.json;$(SolutionDir)CHANGELOG.md;$(SolutionDir)README.md;$(SolutionDir)icon.png" />
         </ItemGroup>
         <Copy SourceFiles="$(TargetPath)" DestinationFolder="$(ReleaseRoot)/$(ProjectName)-Vapok/plugins" SkipUnchangedFiles="true" />
         <Copy SourceFiles="@(TranslationFiles)" DestinationFiles="@(TranslationFiles->'$(ReleaseRoot)/$(ProjectName)-Vapok/plugins/Translations/%(RecursiveDir)%(Filename)%(Extension)')" SkipUnchangedFiles="true" />

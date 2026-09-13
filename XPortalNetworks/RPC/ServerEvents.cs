@@ -39,12 +39,19 @@
                 return;
             }
 
-            var pieceCreator = portalZdo.GetLong(ZDOVars.s_creator);
-            var requesterIsCreator = requesterPlayerId != 0L && requesterPlayerId == pieceCreator;
-            var requesterMayChangeNetwork = requesterIsCreator || NetPeerUtility.IsPeerPrivilegedForPortalNetwork(sender);
-            var requesterMayEditPrivatePortal = requesterIsCreator || NetPeerUtility.IsPeerPrivilegedForPortalNetwork(sender);
-
             KnownPortalsManager.Instance.TryGetValue(portal.Id, out var existing);
+
+            var pieceCreator = portalZdo.GetLong(ZDOVars.s_creator);
+            var currentNetworkOwner = existing != null
+                ? existing.NetworkOwnerPlayerId
+                : ZdoTools.GetNetworkOwnerPlayerId(portalZdo);
+
+            var requesterIsPrivileged = NetPeerUtility.IsPeerPrivilegedForPortalNetwork(sender);
+            var requesterIsCreator = requesterPlayerId != 0L && requesterPlayerId == pieceCreator;
+            var requesterIsNetworkOwner = requesterPlayerId != 0L && requesterPlayerId == currentNetworkOwner;
+
+            var requesterMayChangeNetwork = requesterIsCreator || requesterIsNetworkOwner || requesterIsPrivileged;
+            var requesterMayEditPrivatePortal = requesterIsCreator || requesterIsNetworkOwner || requesterIsPrivileged;
 
             if (!requesterMayChangeNetwork)
             {
@@ -77,24 +84,28 @@
                 }
                 else
                 {
-                    portal.NetworkOwnerPlayerId = pieceCreator;
-                    if (pieceCreator == 0L)
+                    // Personal network
+                    if (requesterIsPrivileged || portal.NetworkOwnerPlayerId == requesterPlayerId || portal.NetworkOwnerPlayerId == currentNetworkOwner)
                     {
-                        portal.NetworkOwnerDisplayName = string.Empty;
-                    }
-                    else if (requesterIsCreator)
-                    {
-                        var fromClient = PortalNetwork.SanitizeNetworkOwnerDisplayName(portal.NetworkOwnerDisplayName);
-                        portal.NetworkOwnerDisplayName = !string.IsNullOrEmpty(fromClient)
-                            ? fromClient
-                            : (PortalNetwork.TryResolveByWorldState(pieceCreator) ?? string.Empty);
+                        if (portal.NetworkOwnerPlayerId == requesterPlayerId)
+                        {
+                            var fromClient = PortalNetwork.SanitizeNetworkOwnerDisplayName(portal.NetworkOwnerDisplayName);
+                            portal.NetworkOwnerDisplayName = !string.IsNullOrEmpty(fromClient)
+                                ? fromClient
+                                : (PortalNetwork.TryResolveByWorldState(requesterPlayerId) ?? string.Empty);
+                        }
+                        else
+                        {
+                            portal.NetworkOwnerDisplayName = PortalNetwork.TryResolveByWorldState(portal.NetworkOwnerPlayerId)
+                                ?? existing?.NetworkOwnerDisplayName
+                                ?? ZdoTools.GetNetworkOwnerDisplayName(portalZdo)
+                                ?? string.Empty;
+                        }
                     }
                     else
                     {
-                        portal.NetworkOwnerDisplayName = PortalNetwork.TryResolveByWorldState(pieceCreator)
-                            ?? existing?.NetworkOwnerDisplayName
-                            ?? ZdoTools.GetNetworkOwnerDisplayName(portalZdo)
-                            ?? string.Empty;
+                        portal.NetworkOwnerPlayerId = requesterPlayerId != 0L ? requesterPlayerId : currentNetworkOwner;
+                        portal.NetworkOwnerDisplayName = PortalNetwork.TryResolveByWorldState(portal.NetworkOwnerPlayerId) ?? string.Empty;
                     }
                 }
             }
@@ -121,13 +132,14 @@
 
             if (portal.IsPrivate)
             {
-                if (pieceCreator == 0L)
+                if (portal.NetworkOwnerPlayerId == 0L)
+                {
+                    portal.NetworkOwnerPlayerId = requesterPlayerId != 0L ? requesterPlayerId : pieceCreator;
+                }
+
+                if (portal.NetworkOwnerPlayerId == 0L)
                 {
                     portal.IsPrivate = false;
-                }
-                else
-                {
-                    portal.NetworkOwnerPlayerId = pieceCreator;
                 }
             }
 

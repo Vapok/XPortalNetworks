@@ -6,12 +6,16 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XPortalNetworks", "XPortalN
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Docs", "Docs\Docs.csproj", "{842B266E-B79F-4BC0-92E4-6322B0CA5642}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{A5ECF0E3-9F04-42C4-B044-8D146D2E7A0E}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Module Files", "Module Files", "{125A2AE5-FB75-4EED-B971-3E0C9C056DA0}"
 	ProjectSection(SolutionItems) = preProject
-		.gitignore = .gitignore
+		CHANGELOG.md = CHANGELOG.md
+		icon.png = icon.png
 		LICENSE = LICENSE
-		publish.ps1 = publish.ps1
+		manifest.json = manifest.json
+		README.md = README.md
 	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Translations", "Translations", "{453B1EE0-9980-4B66-93B3-2DDBD21FEE03}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -30,6 +34,9 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{453B1EE0-9980-4B66-93B3-2DDBD21FEE03} = {125A2AE5-FB75-4EED-B971-3E0C9C056DA0}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {04FA40AF-91D5-4CE8-92ED-7530C8DF0D5E}
