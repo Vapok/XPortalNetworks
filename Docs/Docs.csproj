@@ -132,9 +132,9 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\XPortal\XPortal.csproj">
+    <ProjectReference Include="..\XPortalNetworks\XPortalNetworks.csproj">
       <Project>{deaf4438-8089-40ed-8175-398e1261d45b}</Project>
-      <Name>XPortal</Name>
+      <Name>XPortalNetworks</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
