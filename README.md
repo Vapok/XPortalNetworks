@@ -7,6 +7,7 @@
 [![GitHub Release](https://img.shields.io/github/v/release/Vapok/XPortalNetworks?include_prereleases&logo=github&style=for-the-badge)](https://github.com/Vapok/XPortalNetworks/releases)
 [![Thunderstore Version](https://img.shields.io/thunderstore/v/Vapok/XPortalNetworks?logo=thunderstore&style=for-the-badge)](https://thunderstore.io/c/valheim/p/Vapok/XPortalNetworks/)
 [![Nexus Mods](https://img.shields.io/badge/Nexus_Mods-Available-da8e35?logo=nexusmods&style=for-the-badge)](https://www.nexusmods.com/valheim/mods/3719)
+<br>
 [![Discord](https://img.shields.io/badge/Discord-Join%20Community-7289da?logo=discord&logoColor=white&style=for-the-badge)](https://discord.gg/5YAJkRFBXt)
 [![License: GPL-3.0](https://img.shields.io/badge/License-GPL%203.0-blue.svg?style=for-the-badge)](https://opensource.org/licenses/GPL-3.0)
 
