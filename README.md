@@ -1,10 +1,21 @@
-# XPortal Networks
+<div align="center">
 
-**XPortal Networks** is a Valheim mod that overhauls the vanilla portal system. Instead of being restricted to matching identical portal tags or constructing massive portal hubs, XPortal Networks lets you select any portal's destination directly from an interactive list—now featuring an expanded **Portal Networks** system with Public, Private, and Custom Named Networks!
+# 🌀 XPortal Networks
+
+### *Comprehensive portal networks, private channels, and custom destinations for Valheim.*
+
+[![GitHub Release](https://img.shields.io/github/v/release/Vapok/XPortalNetworks?include_prereleases&logo=github&style=for-the-badge)](https://github.com/Vapok/XPortalNetworks/releases)
+[![Thunderstore Version](https://img.shields.io/thunderstore/v/Vapok/XPortalNetworks?logo=thunderstore&style=for-the-badge)](https://thunderstore.io/c/valheim/p/Vapok/XPortalNetworks/)
+[![Discord](https://img.shields.io/badge/Discord-Join%20Community-7289da?logo=discord&logoColor=white&style=for-the-badge)](https://discord.gg/5YAJkRFBXt)
+[![License: GPL-3.0](https://img.shields.io/badge/License-GPL%203.0-blue.svg?style=for-the-badge)](https://opensource.org/licenses/GPL-3.0)
+
+---
+
+</div>
 
 <p align="center">
-  <b>XPortal Networks</b><br />
-  <img src="https://raw.githubusercontent.com/Vapok/XPortalNetworks/refs/heads/main/images/XPortal%20Networks%20Window.png" alt="XPortal Networks" height="180" />
+  <b>Portal Configuration UI</b><br />
+  <img src="https://raw.githubusercontent.com/Vapok/XPortalNetworks/refs/heads/main/images/XPortal%20Networks%20Window.png" alt="XPortal Configuration UI" height="240" />
 </p>
 
 <p align="center">
@@ -76,6 +87,8 @@ Fully navigable using controllers with integrated on-screen key hints:
 ## Mod Compatibility & Integration
 
 * **[Jötunn, the Valheim Library](https://valheim.thunderstore.io/package/ValheimModding/Jotunn/)** (Required)
+* **[AdventureBackpacks](https://valheim.thunderstore.io/package/Vapok/AdventureBackpacks/)**: Fully Supported (Teleportation restrictions in equipped backpacks are strictly enforced).
+* **[Fast Item Transfer](https://valheim.thunderstore.io/package/Vapok/FastItemTransfer/)**: Fully Supported.
 * **[Advanced Portals](https://valheim.thunderstore.io/package/RandyKnapp/AdvancedPortals/)**: Fully integrated—displays matching colored light icons in dropdowns.
 * **[Stone Portal](https://valheim.thunderstore.io/package/JereKuusela/Stone_Portal/)**: Supported with distinctive portal coloring.
 * **[VHVR - Valheim VR](https://valheim.thunderstore.io/package/Maynard/VHVR/)**: Compatible.
@@ -102,13 +115,15 @@ Fully navigable using controllers with integrated on-screen key hints:
 ## Configuration
 
 ### General & Server Settings
-The main configuration file is located at `BepInEx/config/vapok.mods.xportalnetworks.cfg`. Server-enforced settings will automatically synchronize from the server to connected clients.
+The main configuration file is located at `BepInEx/config/vapok.mods.xportalnetworks.cfg`. Server-enforced settings will automatically synchronize from the server to connected clients via ServerSync.
 
-* **`PingMapDisabled`** *(Server Enforced)*: Disables map pinging for servers playing with `nomap` or immersive navigation rules.
-* **`HidePortalDistance`** *(Server Enforced)*: Hides the meter distance displayed next to portal names in the dropdown.
-* **`DoublePortalCosts`** *(Server Enforced)*: Doubles portal crafting costs to balance the convenience of one-to-many portal routing.
-* **`RestrictPortalRemoval`** *(Server Enforced)*: Restricts deconstructing/destroying portals to the original creator or server admins.
-* **`DisplayPortalColour`**: Displays colored indicators matching portal types in the menu.
+| Setting | Type | Description |
+| :--- | :--- | :--- |
+| **`PingMapDisabled`** | *Server Enforced* | Disables map pinging for servers playing with `nomap` or immersive navigation rules. |
+| **`HidePortalDistance`** | *Server Enforced* | Hides the meter distance displayed next to portal names in the dropdown. |
+| **`DoublePortalCosts`** | *Server Enforced* | Doubles portal crafting costs to balance the convenience of one-to-many portal routing. |
+| **`RestrictPortalRemoval`** | *Server Enforced* | Restricts deconstructing/destroying portals to the original creator or server admins. |
+| **`DisplayPortalColour`** | *Client Config* | Displays colored indicators matching portal types in the menu. |
 
 ### Custom Named Networks (`xportal_networks.json`)
 Servers can define custom networks by editing `BepInEx/config/XPortalNetworks/xportal_networks.json`. Changes to this file are automatically detected and reloaded live without needing to restart the server:
@@ -124,27 +139,27 @@ Servers can define custom networks by editing `BepInEx/config/XPortalNetworks/xp
 
 ---
 
-## Installation
+## Installation & Server Setup
 
 ### Prerequisites
 * **[BepInExPack Valheim](https://valheim.thunderstore.io/package/denikson/BepInExPack_Valheim/)** (v5.4.2200+)
 * **[Jötunn (ValheimLib)](https://valheim.thunderstore.io/package/ValheimModding/Jotunn/)** (v2.20.0+)
 
 ### Automatic (Recommended)
-Use a mod manager like **r2modman** or **Vortex** to download and install XPortal Networks with one click.
+Use a mod manager like **r2modman** or **Thunderstore Mod Manager** to download and install XPortal Networks with one click.
 
 ### Manual Installation
-1. Download the latest release `.zip` from Thunderstore, Nexus Mods, or GitHub Releases.
+1. Download the latest release `.zip` from Thunderstore or GitHub Releases.
 2. Extract the archive contents into your `Valheim/BepInEx/plugins/` directory.
-3. Ensure both client and dedicated server have XPortal Networks installed.
+3. Ensure both client and dedicated server have XPortal Networks installed for multiplayer synchronization.
 
 ---
 
-## Bugs, Feature Requests & Translations
+## Bugs, Feature Requests & Community
 
 * **Bug Reports**: Please submit an issue on the [GitHub Issues](https://github.com/Vapok/XPortalNetworks/issues) page using the `Bug report` template. Please include your `LogOutput.log` file.
 * **Feature Requests**: Open an issue on GitHub selecting the `Feature request` template.
-* **Translations**: Contributions for new languages or localization updates are welcome via GitHub pull requests or issues.
+* **Translations**: Contributions for new languages or localization updates are welcome via GitHub pull requests or on Discord.
 
 ---
 
@@ -152,3 +167,18 @@ Use a mod manager like **r2modman** or **Vortex** to download and install XPorta
 
 * **[SpikeHimself](https://github.com/SpikeHimself)**: Creator of the original **XPortal** mod, upon which XPortal Networks is built and expanded.
 * **Translations & Community**: Thanks to *kaiqueknup*, *makou*, *Smok3y97*, *MexExe*, *hanawa07*, *bonesbro*, *VasariRulez*, *Felix*, and *cawa-93* for original translations and community contributions.
+
+---
+
+<div align="center">
+
+### 👨‍💻 Created by Vapok Gaming
+
+[![Vapok Gaming](https://avatars.githubusercontent.com/u/1264136?s=120&v=4)](https://github.com/Vapok)
+
+**Author**: [Vapok](https://github.com/Vapok)  
+**Source Code**: [GitHub Repository](https://github.com/Vapok/XPortalNetworks)  
+**Community & Support**: [Discord Server](https://discord.gg/5YAJkRFBXt)  
+**Changelog**: [Release Notes](https://github.com/Vapok/XPortalNetworks/blob/main/CHANGELOG.md)
+
+</div>
