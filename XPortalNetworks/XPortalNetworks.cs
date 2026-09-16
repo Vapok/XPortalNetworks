@@ -4,6 +4,8 @@ using Jotunn.Utils;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using Vapok.Common.Abstractions;
+using Vapok.Common.Managers.Splash;
 using XPortalNetworks.Extension;
 using XPortalNetworks.RPC;
 using XPortalNetworks.UI;
@@ -14,8 +16,14 @@ namespace XPortalNetworks
     [BepInIncompatibility("com.sweetgiorni.anyportal")]
     [BepInDependency(Jotunn.Main.ModGuid)]
     [NetworkCompatibility(CompatibilityLevel.EveryoneMustHaveMod, VersionStrictness.Patch)]
-    public class XPortalNetworks : BaseUnityPlugin
+    public class XPortalNetworks : BaseUnityPlugin, IPluginInfo
     {
+        //Interface Properties
+        public string PluginId => Mod.Info.GUID;
+        public string DisplayName => Mod.Info.Name;
+        public string Version => Mod.Info.Version;
+        public BaseUnityPlugin Instance => this;
+
         public const string Key_TargetId = Mod.Info.Name + "_TargetId";
         public const string Key_PreviousId = Mod.Info.Name + "_PreviousId";
         public const string Key_NetworkOwnerPlayerId = Mod.Info.Name + "_NetworkOwnerPlayerId";
@@ -39,6 +47,14 @@ namespace XPortalNetworks
 
             // Load config
             XPortalNetworksConfig.Instance.LoadLocalConfig(Config);
+
+            // Register Startup Splash Screen
+            ModSplashManager.Register(new ModSplashDossier(this)
+            {
+                Tagline = "Select portal destinations from a list with custom networks and private portals support.",
+                ShowOnStartup = XPortalNetworksConfig.Instance.Local.ShowSplashOnStartup,
+                EnableTelemetry = XPortalNetworksConfig.Instance.Local.EnableTelemetry,
+            });
 
             // Subscribe to config events
             XPortalNetworksConfig.Instance.OnLocalConfigChanged += OnLocalConfigChanged;

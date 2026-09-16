@@ -1,4 +1,4 @@
-﻿using BepInEx.Configuration;
+using BepInEx.Configuration;
 using System;
 using System.IO;
 using UnityEngine;
@@ -34,6 +34,8 @@ namespace XPortalNetworks
             public bool HidePortalDistance;
             /// <summary>Server-enforced portal hammer removal rules.</summary>
             public bool RestrictPortalRemoval;
+            public ConfigEntry<bool> ShowSplashOnStartup;
+            public ConfigEntry<bool> EnableTelemetry;
         }
 
         /// <summary>
@@ -105,6 +107,20 @@ namespace XPortalNetworks
                 false,
                 "When true, only the player who placed the portal or a server admin may remove it with the hammer. Other removal (e.g. structural damage) is unchanged." + Desc_EnforcedByServer);
             Local.RestrictPortalRemoval = cfgRestrictPortalRemoval.Value;
+
+            Local.ShowSplashOnStartup = configFile.Bind(
+                "Local Config",
+                "Show Splash on Startup",
+                true,
+                new ConfigDescription("If enabled, displays the mod overview and links splash screen on game startup.",
+                    null, new Vapok.Common.Shared.ConfigurationManagerAttributes { Order = 4 }));
+
+            Local.EnableTelemetry = configFile.Bind(
+                "Local Config",
+                "Enable Anonymous Telemetry",
+                true,
+                new ConfigDescription("If enabled, sends anonymous mod launch and heartbeat telemetry to help improve mod stability and track active versions.",
+                    null, new Vapok.Common.Shared.ConfigurationManagerAttributes { Order = 5 }));
         }
 
         /// <summary>
