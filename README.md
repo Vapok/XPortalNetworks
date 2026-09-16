@@ -4,8 +4,6 @@
 
 ### *Comprehensive portal networks, private channels, and custom destinations for Valheim.*
 
-[![Survival Servers](https://ibin.co/5RCcxHBNFp)](https://www.survivalservers.com/services/game_servers/valheim/?ref=vapok)
-
 [![GitHub Release](https://img.shields.io/github/v/release/Vapok/XPortalNetworks?include_prereleases&logo=github&style=for-the-badge)](https://github.com/Vapok/XPortalNetworks/releases)
 [![Thunderstore Version](https://img.shields.io/thunderstore/v/Vapok/XPortalNetworks?logo=thunderstore&style=for-the-badge)](https://thunderstore.io/c/valheim/p/Vapok/XPortalNetworks/)
 [![Nexus Mods](https://img.shields.io/badge/Nexus_Mods-Available-da8e35?logo=nexusmods&style=for-the-badge)](https://www.nexusmods.com/valheim/mods/3719)
@@ -33,6 +31,14 @@
 </p>
 
 ---
+
+<div align="center">
+
+<br>
+
+[![Survival Servers](https://raw.githubusercontent.com/Vapok/XPortalNetworks/refs/heads/main/images/survivalservers_banner.png)](https://www.survivalservers.com/services/game_servers/valheim/?ref=vapok)
+
+</div>
 
 ## What's New in XPortal Networks
 
