@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+using System;
+using UnityEngine;
 
 namespace XPortalNetworks.RPC
 {
@@ -86,14 +87,27 @@ namespace XPortalNetworks.RPC
         /// <param name="text">The text that should appear on the ping message</param>
         public static void PingMap(Vector3 location, string text)
         {
-            Log.Debug($"Calling RPC `{RPCManager.RPC_CHATMESSAGE}` to ping portal `{text}` at `{location}`");
+            try
+            {
+                if (ZRoutedRpc.instance == null)
+                {
+                    Log.Warning("Cannot ping map: ZRoutedRpc instance is null");
+                    return;
+                }
 
-            // Since Valheim patch 0.214.2 (2023-03-13), the ChatMessage RPC requires a UserInfo object instead of the player name string
-            var localUserInfo = UserInfo.GetLocalUser();
-            // ..but XPortal much prefers to show the name of the portal, instead of the name of the player
-            localUserInfo.Name = text;
+                Log.Debug($"Calling RPC `{RPCManager.RPC_CHATMESSAGE}` to ping portal `{text}` at `{location}`");
 
-            ZRoutedRpc.instance.InvokeRoutedRPC(ZRoutedRpc.Everybody, RPCManager.RPC_CHATMESSAGE, location, (int)Talker.Type.Ping, localUserInfo, string.Empty);
+                // Since Valheim patch 0.214.2 (2023-03-13), the ChatMessage RPC requires a UserInfo object instead of the player name string
+                var localUserInfo = UserInfo.GetLocalUser() ?? new UserInfo();
+                // ..but XPortal much prefers to show the name of the portal, instead of the name of the player
+                localUserInfo.Name = !string.IsNullOrEmpty(text) ? text : "Portal";
+
+                ZRoutedRpc.instance.InvokeRoutedRPC(ZRoutedRpc.Everybody, RPCManager.RPC_CHATMESSAGE, location, (int)Talker.Type.Ping, localUserInfo, string.Empty);
+            }
+            catch (Exception ex)
+            {
+                Log.Warning($"Error while pinging map: {ex.Message}");
+            }
         }
     }
 }

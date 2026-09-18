@@ -1,8 +1,9 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using BepInEx;
 using Jotunn.Managers;
 using Jotunn.Utils;
-using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 using Vapok.Common.Abstractions;
 using Vapok.Common.Managers.Splash;
@@ -256,6 +257,12 @@ namespace XPortalNetworks
 
             // Get information about the portal being hovered over
             var portal = KnownPortalsManager.Instance.GetKnownPortalById(portalId);
+            if (portal == null)
+            {
+                result = string.Empty;
+                return;
+            }
+
             var outputPortalName = portal.GetFriendlyName();
             var outputPortalDestination = portal.GetFriendlyTargetName();
             var colourTag = string.Empty;
@@ -264,7 +271,8 @@ namespace XPortalNetworks
             {
                 // Get information about the portal's destination
                 var targetId = portal.Target;
-                if (!KnownPortalsManager.Instance.ContainsId(targetId))
+                var targetPortal = KnownPortalsManager.Instance.GetKnownPortalById(targetId);
+                if (targetPortal == null)
                 {
                     Log.Error($"Target portal {targetId} appears to be invalid");
                     SendToServer.SyncRequest($"Hovering over portal `{outputPortalName}` which has invalid target `{targetId}`");
@@ -274,7 +282,6 @@ namespace XPortalNetworks
 
                 if (XPortalNetworksConfig.Instance.Local.DisplayPortalColour)
                 {
-                    var targetPortal = KnownPortalsManager.Instance.GetKnownPortalById(portal.Target);
                     colourTag = $"<color={targetPortal.Colour}>>> </color>";
                 }
             }
@@ -292,14 +299,14 @@ namespace XPortalNetworks
         internal static void OnPortalRequestText(TeleportWorld teleportWorld)
         {
             var portalId = teleportWorld.m_nview.GetZDO().m_uid;
-            if (!KnownPortalsManager.Instance.ContainsId(portalId))
+            var portal = KnownPortalsManager.Instance.GetKnownPortalById(portalId);
+            if (portal == null)
             {
                 // TODO: show a friendly message on the screen
                 Log.Error("Interacting with an unknown portal");
                 return;
             }
 
-            var portal = KnownPortalsManager.Instance.GetKnownPortalById(portalId);
             Log.Debug($"Interacting with: {portal}");
             var piece = teleportWorld.GetComponent<Piece>();
             var mayEditNetworkAsAdmin = XPortalNetworksAdminSync.IsLocalPortalNetworkAdmin();
@@ -334,7 +341,8 @@ namespace XPortalNetworks
         {
             if (KnownPortalsManager.Instance.ContainsId(portalId))
             {
-                var portalName = KnownPortalsManager.Instance.GetKnownPortalById(portalId).Name;
+                var portal = KnownPortalsManager.Instance.GetKnownPortalById(portalId);
+                var portalName = portal?.Name ?? portalId.ToString();
                 Log.Debug($"Portal `{portalName}` is being destroyed");
                 KnownPortalsManager.Instance.Remove(portalId);
             }
@@ -518,24 +526,39 @@ namespace XPortalNetworks
         /// <param name="targetId">The ZDOID of the portal to ping</param>
         internal static void PingMapButtonClicked(ZDOID targetId)
         {
-            if (XPortalNetworksConfig.Instance.Server.PingMapDisabled)
+            try
             {
-                return;
+                if (XPortalNetworksConfig.Instance.Server.PingMapDisabled)
+                {
+                    return;
+                }
+
+                var portal = KnownPortalsManager.Instance.GetKnownPortalById(targetId);
+                if (portal == null)
+                {
+                    Log.Warning($"Cannot ping portal: Portal with ID {targetId} not found");
+                    return;
+                }
+
+                Log.Debug($"Pinging portal: {portal}");
+
+                // Get selected portal name and position
+                var name = portal.GetFriendlyName();
+                var location = portal.Location;
+
+                // Send ping to all players
+                SendToClient.PingMap(location, name);
+
+                // Show location on the map
+                if (Minimap.instance != null)
+                {
+                    Minimap.instance.ShowPointOnMap(location);
+                }
             }
-
-            var portal = KnownPortalsManager.Instance.GetKnownPortalById(targetId);
-
-            Log.Debug($"Pinging portal: {portal}");
-
-            // Get selected portal name and position
-            var name = portal.GetFriendlyName();
-            var location = portal.Location;
-
-            // Send ping to all players
-            SendToClient.PingMap(location, name);
-
-            // Show location on the map
-            Minimap.instance.ShowPointOnMap(location);
+            catch (Exception ex)
+            {
+                Log.Warning($"Error during PingMapButtonClicked: {ex.Message}");
+            }
         }
         #endregion
     }

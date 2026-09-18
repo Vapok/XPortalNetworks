@@ -1,9 +1,13 @@
-﻿using Jotunn.Managers;
+using UnityEngine;
+using UnityEngine.Rendering;
+using Jotunn.Managers;
 
 namespace XPortalNetworks
 {
     internal static class Environment
     {
+        private static bool? _isHeadless;
+
         /// <summary>
         /// Are we the Server?
         /// </summary>
@@ -24,7 +28,25 @@ namespace XPortalNetworks
         {
             get
             {
-                return GUIManager.IsHeadless();
+                if (_isHeadless.HasValue)
+                    return _isHeadless.Value;
+
+                try
+                {
+                    if (SystemInfo.graphicsDeviceType == GraphicsDeviceType.Null)
+                    {
+                        _isHeadless = true;
+                        return true;
+                    }
+
+                    _isHeadless = GUIManager.IsHeadless();
+                }
+                catch
+                {
+                    _isHeadless = SystemInfo.graphicsDeviceType == GraphicsDeviceType.Null;
+                }
+
+                return _isHeadless.Value;
             }
         }
 

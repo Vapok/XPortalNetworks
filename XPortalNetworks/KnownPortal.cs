@@ -1,4 +1,4 @@
-﻿using System.IO;
+using System.IO;
 using UnityEngine;
 using XPortalNetworks.Extension;
 
@@ -108,12 +108,13 @@ namespace XPortalNetworks
                 return Localization.instance.Localize("$piece_portal_target_none");   // "(None)"
             }
 
-            if (!KnownPortalsManager.Instance.ContainsId(Target))
+            var targetPortal = KnownPortalsManager.Instance.GetKnownPortalById(Target);
+            if (targetPortal == null)
             {
                 return $"{Target} (invalid)";
             }
 
-            return KnownPortalsManager.Instance.GetKnownPortalById(Target).GetFriendlyName();
+            return targetPortal.GetFriendlyName();
         }
 
         public bool HasTarget()

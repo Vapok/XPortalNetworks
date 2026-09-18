@@ -1,3 +1,15 @@
+# 2.0.7 - Scene Transition & Portal Target Exception Hardening
+* **Scene Transition Exception Resolution**:
+  * Fixed `ArgumentException: The scene is invalid` thrown by `Environment.IsHeadless` when queried during active scene loading and logout transitions.
+  * Cached headless state in `Environment.IsHeadless` and implemented a protected fallback to `SystemInfo.graphicsDeviceType == GraphicsDeviceType.Null`.
+  * Updated `PortalConfigurationPanel.InitialiseUI()` to reference the cached `Environment.IsHeadless` property rather than querying `GUIManager.IsHeadless()` directly.
+* **Portal Lookup Null-Safety & Dictionary Resilience**:
+  * Replaced unsafe dictionary indexer (`knownPortals[id]`) in `KnownPortalsManager.GetKnownPortalById(ZDOID id)` with `knownPortals.TryGetValue(id, out var portal) ? portal : null` to avoid `KeyNotFoundException`.
+  * Added null guards across all callers (`KnownPortal.GetFriendlyTargetName()`, `XPortalNetworks.OnPrePortalHover()`, `XPortalNetworks.OnPortalRequestText()`, `XPortalNetworks.OnPortalDestroyed()`, `ServerEvents.RPC_AddOrUpdateRequest()`, and `PortalConfigurationPanel.ResolveInitialDestinationNetworkOwnerId()`).
+* **Map Ping Hardening**:
+  * Guarded `SendToClient.PingMap()` against null `ZRoutedRpc.instance` and null `UserInfo.GetLocalUser()` instances.
+  * Added exception handling and fallback name string assignment to prevent UI cancellation during map ping requests.
+
 # 2.0.6 - Splash Window Updates & Valheim 1.0.14 Alignment
 * **Splash Window Updates**:
   * Updated telemetry default to unchecked on first launch (Opt-In).
@@ -6,7 +18,7 @@
   * Added interactive tooltip data disclaimers on checkbox hover.
 * **Valheim 1.0.14 Alignment**:
   * Aligned publicized game assembly and UnityEngine references to Valheim 1.0.14.
-  * Updated internalized  dependency to 3.12.1014.
+  * Updated internalized Vapok.Valheim.Common dependency to 3.12.1014.
 
 # 2.0.5 - Jewelcrafting Font Compatibility
 * **Compatibility Fix**: Fixed issue where Jewelcrafting packages its own font which was overriding part of a vanilla font, causing the Splash screen to appear blank.

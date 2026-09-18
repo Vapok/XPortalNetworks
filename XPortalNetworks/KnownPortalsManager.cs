@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -38,7 +38,7 @@ namespace XPortalNetworks
 
         public KnownPortal GetKnownPortalById(ZDOID id)
         {
-            return knownPortals[id];
+            return knownPortals.TryGetValue(id, out var portal) ? portal : null;
         }
 
         public bool TryGetValue(ZDOID id, out KnownPortal portal)

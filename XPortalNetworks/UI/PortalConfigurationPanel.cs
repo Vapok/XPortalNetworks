@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -1075,7 +1075,7 @@ namespace XPortalNetworks.UI
                 : Game.instance.GetPlayerProfile().GetPlayerID();
 
             var targetPortal = KnownPortalsManager.Instance.GetKnownPortalById(thisPortal.Target);
-            if (targetPortal.NetworkOwnerPlayerId == 0L)
+            if (targetPortal == null || targetPortal.NetworkOwnerPlayerId == 0L)
             {
                 return 0L;
             }
@@ -1226,7 +1226,7 @@ namespace XPortalNetworks.UI
 
         private void InitialiseUI()
         {
-            if (GUIManager.IsHeadless())
+            if (Environment.IsHeadless)
             {
                 // This is a dedicated server, UI is not available
                 return;

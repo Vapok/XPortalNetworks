@@ -1,4 +1,4 @@
-﻿namespace XPortalNetworks.RPC.Server
+namespace XPortalNetworks.RPC.Server
 {
     internal static class ServerEvents
     {
@@ -167,7 +167,7 @@
             {
                 // Set the target of the other portal to this portal, if that portal does not currently have a target
                 var targetPortal = KnownPortalsManager.Instance.GetKnownPortalById(updatedPortal.Target);
-                if (!targetPortal.HasTarget())
+                if (targetPortal != null && !targetPortal.HasTarget())
                 {
                     Log.Info("Target portal does not have a target itself, setting target portal's target to this portal");
                     targetPortal.Target = updatedPortal.Id;
