@@ -1,3 +1,11 @@
+# 2.0.8 - Valheim 1.0.15 Alignment & Internalized Dependency Updates
+* **Valheim 1.0.15 Alignment**:
+  * Aligned publicized game assembly and UnityEngine references to Valheim 1.0.15.
+  * Updated internalized `Vapok.Valheim.Common` dependency to 3.13.1015.
+* **Stability & Localization**:
+  * Synchronized all 35 game localizations for splash screen and configuration registry.
+  * Audited network RPCs, ZDO portal mappings, and headless UI isolation against game version 1.0.15.
+
 # 2.0.7 - Scene Transition & Portal Target Exception Hardening
 * **Scene Transition Exception Resolution**:
   * Fixed `ArgumentException: The scene is invalid` thrown by `Environment.IsHeadless` when queried during active scene loading and logout transitions.

@@ -1,10 +1,14 @@
-# 2.0.7 - Scene Transition & Portal Target Exception Hardening
-* **Scene Transition Fix**: Resolved an `ArgumentException: The scene is invalid` during world loading and logout scene transitions by safely caching headless environment checks.
-* **Portal Target Resilience**: Fixed a `KeyNotFoundException` crash when inspecting, hovering over, or interacting with portals whose linked destination had been destroyed or moved out of the active zone.
-* **Map Ping Hardening**: Hardened the map ping broadcast RPC with safe fallbacks and exception protection when user or network instances are initializing.
+# 2.0.8 - Valheim 1.0.15 Alignment & Internalized Dependency Updates
+* **Valheim 1.0.15 Alignment**: Updated game assembly references and internalized `Vapok.Valheim.Common` 3.13.1015.
+* **Localization & Stability**: Re-synchronized 35-language splash localizations and verified patch compatibility.
 
 <details>
 <summary><b>2.0 Changelog History (Valheim Release)</b> (<i>click to expand</i>)</summary>
+
+### 2.0.7 - Scene Transition & Portal Target Exception Hardening
+* **Scene Transition Fix**: Resolved an `ArgumentException: The scene is invalid` during world loading and logout scene transitions by safely caching headless environment checks.
+* **Portal Target Resilience**: Fixed a `KeyNotFoundException` crash when inspecting, hovering over, or interacting with portals whose linked destination had been destroyed or moved out of the active zone.
+* **Map Ping Hardening**: Hardened the map ping broadcast RPC with safe fallbacks and exception protection when user or network instances are initializing.
 
 ### 2.0.6 - Splash Window Updates & Valheim 1.0.14 Alignment
 * **Splash Window Updates**:
