@@ -2,6 +2,9 @@
 * **Valheim 1.0.15 Alignment**:
   * Aligned publicized game assembly and UnityEngine references to Valheim 1.0.15.
   * Updated internalized `Vapok.Valheim.Common` dependency to 3.13.1015.
+* **Transpiler & Patch Hardening**:
+  * Added index bounds validation (`i + 2 < instrs.Count`) and null-safe operand equality checks (`Equals(instrs[i+2].operand, mTargetFound)`) in `TeleportWorld_UpdatePortal_Transpiler`.
+  * Added safety guards against unresolvable target members (`m_target_found` and `IsUsablePortal`) to prevent Harmony `ArgumentException` during patch initialization.
 * **Stability & Localization**:
   * Synchronized all 35 game localizations for splash screen and configuration registry.
   * Audited network RPCs, ZDO portal mappings, and headless UI isolation against game version 1.0.15.

@@ -1,5 +1,6 @@
 # 2.0.8 - Valheim 1.0.15 Alignment & Internalized Dependency Updates
 * **Valheim 1.0.15 Alignment**: Updated game assembly references and internalized `Vapok.Valheim.Common` 3.13.1015.
+* **Transpiler & Patch Hardening**: Added bounds validation and null-safety guards to the `TeleportWorld.UpdatePortal` transpiler.
 * **Localization & Stability**: Re-synchronized 35-language splash localizations and verified patch compatibility.
 
 <details>

@@ -1,4 +1,4 @@
-﻿using HarmonyLib;
+using HarmonyLib;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection.Emit;
@@ -96,7 +96,7 @@ namespace XPortalNetworks.Patches
 
             CodeInstruction LogMessage(CodeInstruction instruction)
             {
-                Log.Debug($"IL_{counter}: Opcode: {instruction.opcode} Operand: {instruction.operand}");
+                Log.Debug($"IL_{counter++}: Opcode: {instruction.opcode} Operand: {instruction.operand}");
                 return instruction;
             }
             
@@ -105,14 +105,33 @@ namespace XPortalNetworks.Patches
             // flag2 = XPortalNetworks.PrivateUseBlockedForPortal(this, closestPlayer, flag2)
             
             var mTargetFound = AccessTools.DeclaredField(typeof(TeleportWorld), nameof(TeleportWorld.m_target_found));
+            var isUsablePortalMethod = AccessTools.DeclaredMethod(typeof(XPortalNetworks), nameof(XPortalNetworks.IsUsablePortal));
+
+            if (mTargetFound == null || isUsablePortalMethod == null)
+            {
+                Log.Warning("TeleportWorld_UpdatePortal_Transpiler: Required target field or method could not be resolved. Skipping transpiler injection.");
+                foreach (var instruction in instrs)
+                {
+                    yield return instruction;
+                }
+                yield break;
+            }
+
+            var matched = false;
 
             for (int i = 0; i < instrs.Count; ++i)
             {
                 // In IL code, we are looking for the store loc.2 opcode that is right before the m_target_found.SetActive() virtual call.
                 // So we are matching on the 3 opcodes of stloc_2, ldarg_0, and lfld (where the field = mTargetFound)
                 // If matched, we are loading the variables needed and then calling Xportal.IsUseablePortal() and setting that output to flag2/loc.2.
-                if (i > 5 && instrs[i].opcode == OpCodes.Stloc_2 && instrs[i+1].opcode == OpCodes.Ldarg_0 && instrs[i+2].opcode == OpCodes.Ldfld && instrs[i+2].operand.Equals(mTargetFound))
+                if (!matched && i > 5 && i + 2 < instrs.Count &&
+                    instrs[i].opcode == OpCodes.Stloc_2 &&
+                    instrs[i+1].opcode == OpCodes.Ldarg_0 &&
+                    instrs[i+2].opcode == OpCodes.Ldfld &&
+                    Equals(instrs[i+2].operand, mTargetFound))
                 {
+                    matched = true;
+
                     // Return original stloc.2 - flag2
                     yield return LogMessage(instrs[i]);
                     
@@ -126,7 +145,7 @@ namespace XPortalNetworks.Patches
                     yield return LogMessage(new CodeInstruction(OpCodes.Ldloc_2));
                     
                     // Call Method
-                    yield return LogMessage(new CodeInstruction(OpCodes.Call, AccessTools.DeclaredMethod(typeof(XPortalNetworks), nameof(XPortalNetworks.IsUsablePortal))));
+                    yield return LogMessage(new CodeInstruction(OpCodes.Call, isUsablePortalMethod));
                     
                     // Set loc.2
                     yield return LogMessage(new CodeInstruction(OpCodes.Stloc_2));
@@ -134,8 +153,12 @@ namespace XPortalNetworks.Patches
                 else
                 {
                     yield return LogMessage(instrs[i]);
-                    counter++;
                 }
+            }
+
+            if (!matched)
+            {
+                Log.Warning("TeleportWorld_UpdatePortal_Transpiler: Could not find target IL instruction sequence to patch. Private portal gating may be inactive.");
             }
         }
     }
