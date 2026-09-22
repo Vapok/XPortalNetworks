@@ -1,10 +1,10 @@
 {
   "name": "XPortalNetworks",
-  "version_number": "2.0.8",
+  "version_number": "2.0.9",
   "website_url": "https://github.com/Vapok/XPortalNetworks",
   "description": "Select portal destination from a list of existing portals with custom networks and private portals support. No more tag pairing, and no more portal hubs!",
   "dependencies": [
     "denikson-BepInExPack_Valheim-5.4.2350",
-    "ValheimModding-Jotunn-2.30.1"
+    "ValheimModding-Jotunn-2.30.2"
   ]
 }

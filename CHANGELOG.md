@@ -1,10 +1,14 @@
-# 2.0.8 - Valheim 1.0.15 Alignment & Internalized Dependency Updates
-* **Valheim 1.0.15 Alignment**: Updated game assembly references and internalized `Vapok.Valheim.Common` 3.13.1015.
-* **Transpiler & Patch Hardening**: Added bounds validation and null-safety guards to the `TeleportWorld.UpdatePortal` transpiler.
-* **Localization & Stability**: Re-synchronized 35-language splash localizations and verified patch compatibility.
+# 2.0.9 - Dedicated Server UI Patch Hardening & Dependency Updates
+* **Dedicated Server Safety**: Ensured UI hooks and hover text patches are bypassed on headless dedicated servers.
+* **Dependency Updates**: Updated internalized `Vapok.Valheim.Common` to 3.17.1015 and `Jotunn` to 2.30.2.
 
 <details>
 <summary><b>2.0 Changelog History (Valheim Release)</b> (<i>click to expand</i>)</summary>
+
+### 2.0.8 - Valheim 1.0.15 Alignment & Internalized Dependency Updates
+* **Valheim 1.0.15 Alignment**: Updated game assembly references and internalized `Vapok.Valheim.Common` 3.13.1015.
+* **Transpiler & Patch Hardening**: Added bounds validation and null-safety guards to the `TeleportWorld.UpdatePortal` transpiler.
+* **Localization & Stability**: Re-synchronized 35-language splash localizations and verified patch compatibility.
 
 ### 2.0.7 - Scene Transition & Portal Target Exception Hardening
 * **Scene Transition Fix**: Resolved an `ArgumentException: The scene is invalid` during world loading and logout scene transitions by safely caching headless environment checks.

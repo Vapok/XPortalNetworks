@@ -1,3 +1,10 @@
+# 2.0.9 - Dedicated Server UI Patch Hardening & Dependency Updates
+* **Dedicated Server Isolation**:
+  * Added `SystemInfo.graphicsDeviceType` check in `Patcher.PatchAll()` to prevent registering client UI patches (`Dropdown_*`, `TextInput_*`, and `TeleportWorld_GetHoverText`) on headless dedicated servers.
+* **Dependency Updates**:
+  * Updated internalized `Vapok.Valheim.Common` to 3.17.1015.
+  * Updated `JotunnLib` dependency to 2.30.2.
+
 # 2.0.8 - Valheim 1.0.15 Alignment & Internalized Dependency Updates
 * **Valheim 1.0.15 Alignment**:
   * Aligned publicized game assembly and UnityEngine references to Valheim 1.0.15.
