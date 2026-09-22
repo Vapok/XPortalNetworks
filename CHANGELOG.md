@@ -1,5 +1,6 @@
 # 2.0.9 - Dedicated Server UI Patch Hardening & Dependency Updates
 * **Dedicated Server Safety**: Ensured UI hooks and hover text patches are bypassed on headless dedicated servers.
+* **Compatibility Notice**: An issue in [ValheimCommunityPatch](https://thunderstore.io/c/valheim/p/MidnightMods/ValheimCommunityPatch/) prevented portals from connecting properly. This has been resolved in version 0.29.0 of that mod; please ensure you update if you use it.
 * **Dependency Updates**: Updated Jotunn to 2.30.2 and internal dependencies for stability.
 
 <details>

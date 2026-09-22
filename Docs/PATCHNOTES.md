@@ -1,6 +1,8 @@
 # 2.0.9 - Dedicated Server UI Patch Hardening & Dependency Updates
 * **Dedicated Server Isolation**:
   * Added `SystemInfo.graphicsDeviceType` check in `Patcher.PatchAll()` to prevent registering client UI patches (`Dropdown_*`, `TextInput_*`, and `TeleportWorld_GetHoverText`) on headless dedicated servers.
+* **Ecosystem Compatibility**:
+  * Noted that an issue in [ValheimCommunityPatch](https://thunderstore.io/c/valheim/p/MidnightMods/ValheimCommunityPatch/) prevented portal network connections; resolved in ValheimCommunityPatch 0.29.0.
 * **Dependency Updates**:
   * Updated internalized `Vapok.Valheim.Common` to 3.17.1015.
   * Updated `JotunnLib` dependency to 2.30.2.
