@@ -6,30 +6,33 @@ namespace XPortalNetworks.Patches
     [HarmonyPatch(typeof(Piece), nameof(Piece.SetCreator))]
     static class Piece_SetCreator
     {
-        private static WearNTear m_WearNTear;
-
         static void Postfix(Piece __instance)
         {
-            if (__instance == null)
+            if (__instance == null || string.IsNullOrEmpty(__instance.m_name) || !__instance.m_name.Contains("$piece_portal"))
                 return;
 
-            m_WearNTear = __instance.GetComponent<WearNTear>();
-            CheckWearNTearCreationTime();
+            WearNTear wearNTear = __instance.GetComponent<WearNTear>();
+            if (wearNTear == null)
+                return;
+
+            CheckWearNTearCreationTime(true, wearNTear);
         }
 
         private static void CheckWearNTearCreationTime(bool delayed = true, object state = null)
         {
+            if (state is not WearNTear wearNTear || wearNTear == null)
+                return;
+
             if (delayed)
             {
-                QueuedAction.Queue(CheckWearNTearCreationTime, delay: 1);
+                QueuedAction.Queue(CheckWearNTearCreationTime, delay: 1, state: wearNTear);
                 return;
             }
 
-            if (m_WearNTear != null && m_WearNTear.m_createTime == -1f)
+            if (wearNTear.m_createTime == -1f)
             {
                 Log.Debug("Portal detection work-around: manually invoking WearNTear.OnPlace postfix");
-                WearNTear_OnPlaced.Postfix(m_WearNTear);
-                m_WearNTear = null;
+                WearNTear_OnPlaced.Postfix(wearNTear);
             }
         }
     }

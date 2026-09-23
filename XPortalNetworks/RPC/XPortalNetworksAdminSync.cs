@@ -1,8 +1,7 @@
+using Splatform;
+
 namespace XPortalNetworks.RPC
 {
-    /// <summary>
-    /// Server-confirmed admin access for portal network UI. Hosts do not use the RPC.
-    /// </summary>
     internal static class XPortalNetworksAdminSync
     {
         private static bool _requestedThisSession;
@@ -33,8 +32,20 @@ namespace XPortalNetworks.RPC
                 return _serverSaysAdmin;
             }
 
-            var userId = UserInfo.GetLocalUser().UserId;
-            return userId.IsValid && ZNet.instance.PlayerIsAdmin(userId);
+            try
+            {
+                UserInfo localUser = UserInfo.GetLocalUser();
+                if (localUser != null && localUser.UserId.IsValid)
+                {
+                    return ZNet.instance.PlayerIsAdmin(localUser.UserId);
+                }
+            }
+            catch
+            {
+                return false;
+            }
+
+            return false;
         }
 
         internal static void ApplyServerReply(bool isAdmin)
@@ -56,9 +67,12 @@ namespace XPortalNetworks.RPC
             }
 
             _requestedThisSession = true;
-            var pkg = new ZPackage();
-            ZRoutedRpc.instance.InvokeRoutedRPC(Environment.ServerPeerId, RPCManager.RPC_REQUESTADMINSYNC, pkg);
-            Log.Debug("Requested portal network admin status from server");
+            ZPackage pkg = new ZPackage();
+            if (ZRoutedRpc.instance != null)
+            {
+                ZRoutedRpc.instance.InvokeRoutedRPC(Environment.ServerPeerId, RPCManager.RPC_REQUESTADMINSYNC, pkg);
+                Log.Debug("Requested portal network admin status from server");
+            }
         }
     }
 }

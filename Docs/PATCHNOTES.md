@@ -1,11 +1,22 @@
 # 2.0.9 - Dedicated Server UI Patch Hardening & Dependency Updates
-* **Dedicated Server Isolation**:
-  * Added `SystemInfo.graphicsDeviceType` check in `Patcher.PatchAll()` to prevent registering client UI patches (`Dropdown_*`, `TextInput_*`, and `TeleportWorld_GetHoverText`) on headless dedicated servers.
-* **Placement & Shutdown Hardening (`Patches/WearNTear.cs`, `Patches/Piece.cs`, `XPortalNetworks.cs`)**:
+* **Dedicated Server Isolation (`Environment.cs`, `Patches/Patcher.cs`, `Patches/Dropdown.cs`)**:
+  * Switched headless detection to `Jotunn.Managers.GUIManager.IsHeadless()` directly, removing `SystemInfo.graphicsDeviceType` in compliance with repository invariants.
+  * Added early returns in `Dropdown_*` patches and guarded UI patch registrations in `Patcher.Patch()` when running on headless servers.
+* **Portal Reconnection & Identity (`Patches/ZDOMan.cs`, `KnownPortal.cs`, `KnownPortalsManager.cs`)**:
+  * Fixed ZDOID type mismatch in `ZDOMan_ConnectPortals` where `Key_PreviousId` was checked via `GetString()` instead of `GetZDOID()`, avoiding spurious fallback lookup on session load.
+  * Implemented `IEquatable<KnownPortal>`, `Equals`, and `GetHashCode` based on `ZDOID` on `KnownPortal`.
+  * Updated `KnownPortalsManager.UpdateFromList` to reconcile using `HashSet<ZDOID>`, eliminating object reference mismatch during network resync.
+* **Placement & State Hardening (`Patches/Piece.cs`, `Patches/WearNTear.cs`, `Patches/Player.cs`)**:
+  * Eliminated static `m_WearNTear` field in `Piece_SetCreator`, scoped check strictly to portal pieces, and passed instance via `QueuedAction` state.
   * Added null safety guards on `Piece`, `piece.m_name`, and `ZNetView` in `WearNTear_OnPlaced.Postfix`, resolving `XPORTALNETWORKS-9`.
-  * Guarded `m_WearNTear` in `Piece_SetCreator.CheckWearNTearCreationTime`.
-  * Removed runtime `Patcher.Unpatch()` call from `OnDestroy()` to avoid Mono dynamic method inspection `InvalidOperationException` during application exit under Unity 6.
-  * Removed legacy XML summary blocks in compliance with repository standards.
+  * Removed dead `Patches/Player.cs` stub.
+* **RPC & Server Hardening (`RPC/ServerEvents.cs`, `RPC/XPortalNetworksAdminSync.cs`, `NetPeerUtility.cs`, `RPC/RPCManager.cs`)**:
+  * Guarded `peer.m_socket != null` before `GetHostName()` in `RPC_RequestAdminSync` and `NetPeerUtility.IsPeerPrivilegedForPortalNetwork`.
+  * Protected `UserInfo.GetLocalUser()` with try-catch in `XPortalNetworksAdminSync.IsLocalPortalNetworkAdmin()`.
+  * Guarded `ZRoutedRpc.instance == null` in `RPCManager.Register()`.
+* **Unity Lifecycle & Code Hygiene (`UI/PortalConfigurationPanel.cs`, `XPortalNetworks.cs`)**:
+  * Replaced `?.` on Unity objects (`Dropdown`, `ScrollRect`, `Component`, `GameObject`) with explicit `!= null` checks adhering to Unity lifecycle semantics.
+  * Removed legacy XML summary blocks across codebase.
 * **Ecosystem Compatibility**:
   * Noted that an issue in [ValheimCommunityPatch](https://thunderstore.io/c/valheim/p/MidnightMods/ValheimCommunityPatch/) prevented portal network connections; resolved in ValheimCommunityPatch 0.29.0.
 * **Dependency Updates**:

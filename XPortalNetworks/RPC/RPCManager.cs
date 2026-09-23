@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 
 namespace XPortalNetworks.RPC
 {
@@ -24,11 +24,14 @@ namespace XPortalNetworks.RPC
         internal const string RPC_CHATMESSAGE = "ChatMessage";
         #endregion
 
-        /// <summary>
-        /// Register our RPCs with ZRoutedRpc, so that the game knows which function to call when these messages arrive
-        /// </summary>
         public static void Register()
         {
+            if (ZRoutedRpc.instance == null)
+            {
+                Log.Warning("Cannot register RPCs: ZRoutedRpc.instance is null");
+                return;
+            }
+
             // Server RPCs
             ZRoutedRpc.instance.Register(RPC_SYNCPORTAL, new Action<long, ZPackage>(Client.ClientEvents.RPC_SyncPortal));
             ZRoutedRpc.instance.Register(RPC_RESYNC, new Action<long, ZPackage, string>(Client.ClientEvents.RPC_Resync));

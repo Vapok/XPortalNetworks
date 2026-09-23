@@ -4,22 +4,12 @@ namespace XPortalNetworks.RPC.Server
     {
         private const string ERR_NOTSERVER = "but I am not the server!";
 
-        /// <summary>
-        /// A client wishes to receive the portal list
-        /// </summary>
-        /// <param name="sender">The id of the sender</param>
-        /// <param name="reason">The reason for the Resync Request</param>
         internal static void RPC_SyncRequest(long sender, string reason)
         {
             Log.Info($"Received sync request from `{sender}` because: {reason}");
             XPortalNetworks.ProcessSyncRequest(reason);
         }
 
-        /// <summary>
-        /// A client wishes for a portal to be added or updated
-        /// </summary>
-        /// <param name="sender">The id of the sender</param>
-        /// <param name="pkg">A ZPackage containing the packed KnownPortal</param>
         internal static void RPC_AddOrUpdateRequest(long sender, ZPackage pkg)
         {
             if (!Environment.IsServer)
@@ -214,10 +204,6 @@ namespace XPortalNetworks.RPC.Server
             }
         }
 
-        /// <summary>
-        /// A client has asked for the server's config settings
-        /// </summary>
-        /// <param name="sender">The id of the sender</param>
         internal static void RPC_ConfigRequest(long sender)
         {
             if (!Environment.IsServer)
@@ -227,11 +213,10 @@ namespace XPortalNetworks.RPC.Server
             }
 
             Log.Debug($"{sender} wants to receive the config");
-            var pkg = XPortalNetworksConfig.Instance.PackLocalConfig();
+            ZPackage pkg = XPortalNetworksConfig.Instance.PackLocalConfig();
             SendToClient.Config(sender, pkg);
         }
 
-        /// <summary>Client asks for the custom network list.</summary>
         internal static void RPC_RequestCustomNetworks(long sender)
         {
             if (!Environment.IsServer)
@@ -244,9 +229,6 @@ namespace XPortalNetworks.RPC.Server
             SendToClient.CustomNetworks(sender, CustomNetworks.PackForServer());
         }
 
-        /// <summary>
-        /// Client asks whether this connection is a server admin for portal network UI.
-        /// </summary>
         internal static void RPC_RequestAdminSync(long sender, ZPackage _)
         {
             if (!Environment.IsServer)
@@ -255,19 +237,22 @@ namespace XPortalNetworks.RPC.Server
             }
 
             bool isAdmin = false;
-            var peer = ZNet.instance.GetPeer(sender);
+            ZNetPeer peer = ZNet.instance != null ? ZNet.instance.GetPeer(sender) : null;
             if (peer != null)
             {
-                isAdmin = ZNet.instance.IsAdmin(peer.m_socket.GetHostName());
+                isAdmin = peer.m_socket != null && ZNet.instance != null && ZNet.instance.IsAdmin(peer.m_socket.GetHostName());
             }
-            else if (ZNet.instance.IsServer() && sender == ZNet.GetUID())
+            else if (ZNet.instance != null && ZNet.instance.IsServer() && sender == ZNet.GetUID())
             {
                 isAdmin = ZNet.instance.LocalPlayerIsAdminOrHost();
             }
 
-            var outPkg = new ZPackage();
+            ZPackage outPkg = new ZPackage();
             outPkg.Write(isAdmin);
-            ZRoutedRpc.instance.InvokeRoutedRPC(sender, RPCManager.RPC_ADMINSYNC, outPkg);
+            if (ZRoutedRpc.instance != null)
+            {
+                ZRoutedRpc.instance.InvokeRoutedRPC(sender, RPCManager.RPC_ADMINSYNC, outPkg);
+            }
         }
     }
 }

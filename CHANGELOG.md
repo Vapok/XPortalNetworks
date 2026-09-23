@@ -57,10 +57,3 @@
 
 </details>
 
-<details>
-<summary><b>1.0 Changelog History (Valheim Early Access)</b> (<i>click to expand</i>)</summary>
-
-### 1.0.0 - Initial Portal Management Release
-* Initial release of portal grouping and tag management mechanics.
-
-</details>

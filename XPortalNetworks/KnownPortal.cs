@@ -1,10 +1,11 @@
+using System;
 using System.IO;
 using UnityEngine;
 using XPortalNetworks.Extension;
 
 namespace XPortalNetworks
 {
-    public class KnownPortal
+    public class KnownPortal : IEquatable<KnownPortal>
     {
         public ZDOID Id { get; set; }
         public string Name { get; set; }
@@ -13,13 +14,10 @@ namespace XPortalNetworks
         public Vector3 Location { get; set; }
         public string Colour { get; set; }
 
-        /// <summary>0 = Global, 1–15 = custom globals, else personal network id.</summary>
         public long NetworkOwnerPlayerId { get; set; }
 
-        /// <summary>Network owner label stored on the portal ZDO.</summary>
         public string NetworkOwnerDisplayName { get; set; }
 
-        /// <summary>Private portals are owner-only in lists and behave as personal network.</summary>
         public bool IsPrivate { get; set; }
 
         public bool IsDefaultPortal
@@ -43,7 +41,6 @@ namespace XPortalNetworks
             IsPrivate = false;
         }
 
-        /// <summary>New or hover placeholder portal; privacy default from config.</summary>
         public KnownPortal(ZDOID id, Vector3 location) : this(id)
         {
             Location = location;
@@ -63,7 +60,6 @@ namespace XPortalNetworks
             IsPrivate = ReadOptionalBool(pkg);
         }
 
-        /// <summary>Reads the packed network owner display name, or empty if the package has no more data.</summary>
         private static string ReadOptionalString(ZPackage pkg)
         {
             try
@@ -90,10 +86,10 @@ namespace XPortalNetworks
 
         public string GetFriendlyName()
         {
-            var portalName = Name;
+            string portalName = Name;
             if (string.IsNullOrEmpty(portalName))
             {
-                return Localization.instance.Localize("$piece_portal_tag_none");  // "(No Name)"
+                return Localization.instance.Localize("$piece_portal_tag_none");
             }
             else
             {
@@ -105,10 +101,10 @@ namespace XPortalNetworks
         {
             if (!HasTarget())
             {
-                return Localization.instance.Localize("$piece_portal_target_none");   // "(None)"
+                return Localization.instance.Localize("$piece_portal_target_none");
             }
 
-            var targetPortal = KnownPortalsManager.Instance.GetKnownPortalById(Target);
+            KnownPortal targetPortal = KnownPortalsManager.Instance.GetKnownPortalById(Target);
             if (targetPortal == null)
             {
                 return $"{Target} (invalid)";
@@ -119,12 +115,12 @@ namespace XPortalNetworks
 
         public bool HasTarget()
         {
-            return Target != null && Target != ZDOID.None && !Target.IsNone();
+            return Target != ZDOID.None && !Target.IsNone();
         }
 
         public ZPackage Pack()
         {
-            var pkg = new ZPackage();
+            ZPackage pkg = new ZPackage();
             pkg.Write(Id);
             pkg.Write(Name);
             pkg.Write(Location);
@@ -144,12 +140,32 @@ namespace XPortalNetworks
 
         public override string ToString()
         {
-            return $"{{ Id: `{Id}`, Name; `{GetFriendlyName()}`, Location: `{Location}`, NetworkOwner: `{NetworkOwnerPlayerId}` (`{NetworkOwnerDisplayName}`), Private: `{IsPrivate}`, Target: `{Target}` (`{GetFriendlyTargetName()}`), Colour: `{Colour}` }}";
+            return $"{{ Id: `{Id}`, Name: `{GetFriendlyName()}`, Location: `{Location}`, NetworkOwner: `{NetworkOwnerPlayerId}` (`{NetworkOwnerDisplayName}`), Private: `{IsPrivate}`, Target: `{Target}` (`{GetFriendlyTargetName()}`), Colour: `{Colour}` }}";
         }
 
         public bool IsGlobalNetwork()
         {
             return NetworkOwnerPlayerId == 0L;
         }
+
+        public bool Equals(KnownPortal other)
+        {
+            if (other is null)
+                return false;
+            if (ReferenceEquals(this, other))
+                return true;
+            return Id == other.Id;
+        }
+
+        public override bool Equals(object obj)
+        {
+            return Equals(obj as KnownPortal);
+        }
+
+        public override int GetHashCode()
+        {
+            return Id.GetHashCode();
+        }
     }
 }
+

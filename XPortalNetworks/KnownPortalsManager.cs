@@ -15,10 +15,6 @@ namespace XPortalNetworks
         public static KnownPortalsManager Instance { get { return lazy.Value; } }
         ////////////////////////////
 
-        /// <summary>
-        /// This is the core of XPortal. This is the list of known portals, indexed by ZDOID.
-        /// Each value is a KnownPortal, which holds the ZDOID, Name, Location and the portal's target ZDOID.
-        /// </summary>
         private readonly Dictionary<ZDOID, KnownPortal> knownPortals = new Dictionary<ZDOID, KnownPortal>();
 
         public int Count
@@ -38,7 +34,7 @@ namespace XPortalNetworks
 
         public KnownPortal GetKnownPortalById(ZDOID id)
         {
-            return knownPortals.TryGetValue(id, out var portal) ? portal : null;
+            return knownPortals.TryGetValue(id, out KnownPortal portal) ? portal : null;
         }
 
         public bool TryGetValue(ZDOID id, out KnownPortal portal)
@@ -51,7 +47,6 @@ namespace XPortalNetworks
             return knownPortals.Where(p => p.Value.PreviousId == previousId).Select(kvp => kvp.Value).FirstOrDefault();
         }
 
-        /// <summary>Returns any stored network display name for that network id, or null.</summary>
         public string GetNetworkOwnerDisplayNameForPlayerId(long networkOwnerPlayerId)
         {
             if (networkOwnerPlayerId == 0L)
@@ -59,7 +54,7 @@ namespace XPortalNetworks
                 return null;
             }
 
-            foreach (var p in knownPortals.Values)
+            foreach (KnownPortal p in knownPortals.Values)
             {
                 if (p.NetworkOwnerPlayerId != networkOwnerPlayerId)
                 {
@@ -80,13 +75,9 @@ namespace XPortalNetworks
             return knownPortals.Values.ToList();
         }
 
-        /// <summary>
-        /// Packs the list of portals into a ZPackage. The package is prepended by an int which indicates how many portals are in the package.
-        /// </summary>
-        /// <returns></returns>
         public ZPackage Pack()
         {
-            var allPortals = GetList();
+            List<KnownPortal> allPortals = GetList();
 
             var pkg = new ZPackage();
             pkg.Write(allPortals.Count);
@@ -186,32 +177,30 @@ namespace XPortalNetworks
 
         private void UpdateFromList(List<KnownPortal> updatedPortals)
         {
-            // First, update the portals we already know, and add new ones
             Log.Debug($"Updating {updatedPortals.Count} portals");
-            foreach (var portal in updatedPortals)
+            foreach (KnownPortal portal in updatedPortals)
             {
                 AddOrUpdate(portal);
             }
 
-            // Second, remove Known Portals that didn't appear in the sync package
-            var knownPortals = GetList();
-            var deletedPortals = knownPortals.Where(p => !updatedPortals.Contains(p));
-            Log.Debug($"Removing {deletedPortals.Count()} portals");
-            foreach (var portal in deletedPortals)
+            HashSet<ZDOID> updatedIds = new HashSet<ZDOID>(updatedPortals.Select(p => p.Id));
+            List<KnownPortal> currentPortals = GetList();
+            List<KnownPortal> deletedPortals = currentPortals.Where(p => !updatedIds.Contains(p.Id)).ToList();
+            Log.Debug($"Removing {deletedPortals.Count} portals");
+            foreach (KnownPortal portal in deletedPortals)
             {
                 Remove(portal);
             }
 
-            // Third, check if any portals are targeting portals that no longer exist, and ask the server to fix those
-            var targetingInvalidPortals = GetList().Where(p => p.Target != ZDOID.None && !ContainsId(p.Target));
-            Log.Debug($"Retargeting {targetingInvalidPortals.Count()} portals");
-            foreach (var portal in targetingInvalidPortals)
+            List<KnownPortal> targetingInvalidPortals = GetList().Where(p => p.Target != ZDOID.None && !ContainsId(p.Target)).ToList();
+            Log.Debug($"Retargeting {targetingInvalidPortals.Count} portals");
+            foreach (KnownPortal portal in targetingInvalidPortals)
             {
                 portal.Target = ZDOID.None;
                 SendToServer.AddOrUpdateRequest(portal);
             }
 
-            Log.Info($"Known portals updated");
+            Log.Info("Known portals updated");
             ReportAllPortals();
         }
 

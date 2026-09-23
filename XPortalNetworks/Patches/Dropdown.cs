@@ -1,4 +1,4 @@
-﻿using HarmonyLib;
+using HarmonyLib;
 using UnityEngine.UI;
 using XPortalNetworks.UI;
 
@@ -9,7 +9,7 @@ namespace XPortalNetworks.Patches
     {
         static bool Prefix(Dropdown __instance)
         {
-            if (PortalConfigurationPanel.Instance == null || !PortalConfigurationPanel.IsManagedDropdown(__instance))
+            if (Environment.IsHeadless || PortalConfigurationPanel.Instance == null || !PortalConfigurationPanel.IsManagedDropdown(__instance))
             {
                 return true;
             }
@@ -37,7 +37,7 @@ namespace XPortalNetworks.Patches
     {
         static void Postfix(Dropdown __instance)
         {
-            if (!PortalConfigurationPanel.IsManagedDropdownName(__instance.name))
+            if (Environment.IsHeadless || !PortalConfigurationPanel.IsManagedDropdownName(__instance.name))
             {
                 return;
             }
@@ -54,7 +54,7 @@ namespace XPortalNetworks.Patches
     {
         static void Postfix(Dropdown __instance)
         {
-            if (!PortalConfigurationPanel.IsManagedDropdownName(__instance.name))
+            if (Environment.IsHeadless || !PortalConfigurationPanel.IsManagedDropdownName(__instance.name))
             {
                 return;
             }
@@ -69,7 +69,7 @@ namespace XPortalNetworks.Patches
     {
         static void Postfix(Dropdown __instance)
         {
-            if (!PortalConfigurationPanel.IsManagedDropdownName(__instance.name))
+            if (Environment.IsHeadless || !PortalConfigurationPanel.IsManagedDropdownName(__instance.name))
             {
                 return;
             }

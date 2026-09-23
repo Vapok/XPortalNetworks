@@ -196,7 +196,7 @@ namespace XPortalNetworks.UI
 
         internal static void ApplyListScroll(Dropdown dropdown, bool rebuildLayout = true)
         {
-            if (dropdown?.options == null || dropdown.options.Count == 0)
+            if (dropdown == null || dropdown.options == null || dropdown.options.Count == 0)
             {
                 return;
             }
@@ -316,7 +316,7 @@ namespace XPortalNetworks.UI
             if (toggle == null)
             {
                 ScrollRect sr = FindListScrollRect(dropdown);
-                RectTransform content = sr?.content;
+                RectTransform content = sr != null ? sr.content : null;
                 if (content != null && rowIndex < content.childCount)
                 {
                     Transform row = content.GetChild(rowIndex);
@@ -596,8 +596,12 @@ namespace XPortalNetworks.UI
             }
 
             FieldInfo field = typeof(Dropdown).GetField("m_Dropdown", BindingFlags.Instance | BindingFlags.NonPublic);
-            object raw = field?.GetValue(dropdown);
-            GameObject go = raw as GameObject ?? (raw as Component)?.gameObject;
+            object raw = field != null ? field.GetValue(dropdown) : null;
+            GameObject go = raw as GameObject;
+            if (go == null && raw is Component comp && comp != null)
+            {
+                go = comp.gameObject;
+            }
             if (go == null || !go.activeInHierarchy)
             {
                 return null;
@@ -1685,9 +1689,18 @@ namespace XPortalNetworks.UI
 
         public void Dispose()
         {
-            targetPortalDropdown?.onValueChanged.RemoveAllListeners();
-            networkAssignmentDropdown?.onValueChanged.RemoveAllListeners();
-            destinationNetworkDropdown?.onValueChanged.RemoveAllListeners();
+            if (targetPortalDropdown != null)
+            {
+                targetPortalDropdown.onValueChanged.RemoveAllListeners();
+            }
+            if (networkAssignmentDropdown != null)
+            {
+                networkAssignmentDropdown.onValueChanged.RemoveAllListeners();
+            }
+            if (destinationNetworkDropdown != null)
+            {
+                destinationNetworkDropdown.onValueChanged.RemoveAllListeners();
+            }
             if (privatePortalToggle != null)
             {
                 privatePortalToggle.onValueChanged.RemoveAllListeners();
