@@ -1,10 +1,15 @@
 # 2.0.9 - Dedicated Server UI Patch Hardening & Dependency Updates
 * **Dedicated Server Isolation**:
   * Added `SystemInfo.graphicsDeviceType` check in `Patcher.PatchAll()` to prevent registering client UI patches (`Dropdown_*`, `TextInput_*`, and `TeleportWorld_GetHoverText`) on headless dedicated servers.
+* **Placement & Shutdown Hardening (`Patches/WearNTear.cs`, `Patches/Piece.cs`, `XPortalNetworks.cs`)**:
+  * Added null safety guards on `Piece`, `piece.m_name`, and `ZNetView` in `WearNTear_OnPlaced.Postfix`, resolving `XPORTALNETWORKS-9`.
+  * Guarded `m_WearNTear` in `Piece_SetCreator.CheckWearNTearCreationTime`.
+  * Removed runtime `Patcher.Unpatch()` call from `OnDestroy()` to avoid Mono dynamic method inspection `InvalidOperationException` during application exit under Unity 6.
+  * Removed legacy XML summary blocks in compliance with repository standards.
 * **Ecosystem Compatibility**:
   * Noted that an issue in [ValheimCommunityPatch](https://thunderstore.io/c/valheim/p/MidnightMods/ValheimCommunityPatch/) prevented portal network connections; resolved in ValheimCommunityPatch 0.29.0.
 * **Dependency Updates**:
-  * Updated internalized `Vapok.Valheim.Common` to 3.17.1015.
+  * Updated internalized `Vapok.Valheim.Common` to 3.19.1015.
   * Updated `JotunnLib` dependency to 2.30.2.
 
 # 2.0.8 - Valheim 1.0.15 Alignment & Internalized Dependency Updates

@@ -1,30 +1,29 @@
-﻿using HarmonyLib;
+using HarmonyLib;
+using UnityEngine;
 
 namespace XPortalNetworks.Patches
 {
     [HarmonyPatch(typeof(WearNTear), nameof(WearNTear.OnPlaced))]
     static class WearNTear_OnPlaced
     {
-        /// <summary>
-        /// After placing a piece, check if it's a portal, and if so, call OnPortalPlaced
-        /// Known issue: This patch magically stops working if a patch on Player.PlacePiece exists (here or in another mod)
-        /// See: SpikeHimself/XPortal#36 and BepInEx/HarmonyX#71
-        /// </summary>
         internal static void Postfix(WearNTear __instance)
         {
-            var piece = __instance.GetComponent<Piece>();
-            var nview = __instance.GetComponent<ZNetView>();
-            if (piece.m_name.Contains("$piece_portal") && nview)
+            if (__instance == null)
+                return;
+
+            Piece piece = __instance.GetComponent<Piece>();
+            ZNetView nview = __instance.GetComponent<ZNetView>();
+            if (piece != null && !string.IsNullOrEmpty(piece.m_name) && piece.m_name.Contains("$piece_portal") && nview != null)
             {
-                var portalZDO = nview.GetZDO();
+                ZDO portalZDO = nview.GetZDO();
                 if (portalZDO == null)
                 {
                     Log.Error("A portal was placed but the ZDO is not available");
                     return;
                 }
 
-                var portalId = portalZDO.m_uid;
-                var location = portalZDO.GetPosition();
+                ZDOID portalId = portalZDO.m_uid;
+                Vector3 location = portalZDO.GetPosition();
                 XPortalNetworks.OnPortalPlaced(portalId, location);
             }
         }
@@ -33,33 +32,29 @@ namespace XPortalNetworks.Patches
     [HarmonyPatch(typeof(WearNTear), nameof(WearNTear.Destroy))]
     static class WearNTear_Destroy
     {
-        /// <summary>
-        /// Before destroying a piece, check if it's a portal, and if so, call OnPortalDestroyed
-        /// </summary>
         static void Prefix(WearNTear __instance)
         {
-            var piece = __instance.m_piece;
-            if (!piece)
-            {
+            if (__instance == null)
                 return;
-            }
 
-            var nview = piece.m_nview;
-            if (!nview)
-            {
+            Piece piece = __instance.m_piece;
+            if (piece == null)
                 return;
-            }
 
-            if (piece.m_name.Contains("$piece_portal") && piece.CanBeRemoved())
+            ZNetView nview = piece.m_nview;
+            if (nview == null)
+                return;
+
+            if (!string.IsNullOrEmpty(piece.m_name) && piece.m_name.Contains("$piece_portal") && piece.CanBeRemoved())
             {
-                var portalZDO = nview.GetZDO();
+                ZDO portalZDO = nview.GetZDO();
                 if (portalZDO == null)
                 {
                     Log.Error("A portal was destroyed but the ZDO is not available");
                     return;
                 }
 
-                var portalId = portalZDO.m_uid;
+                ZDOID portalId = portalZDO.m_uid;
                 XPortalNetworks.OnPortalDestroyed(portalId);
             }
         }
