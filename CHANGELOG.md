@@ -1,11 +1,16 @@
-# 2.0.9 - Dedicated Server UI Patch Hardening & Dependency Updates
+# 2.0.10 - Portal Connection Fix
+> **Author's Note:** Apologies for the update earlier which messed up portals connections. This has been fixed.
+
+* Fixed portal destinations reconnecting to incorrect portals on world reload or server restart.
+
+<details>
+<summary><b>2.0 Changelog History (Valheim Release)</b> (<i>click to expand</i>)</summary>
+
+### 2.0.9 - Dedicated Server UI Patch Hardening & Dependency Updates
 * **Dedicated Server Safety**: Ensured UI hooks and hover text patches are bypassed on headless dedicated servers.
 * **Compatibility Notice**: An issue in [ValheimCommunityPatch](https://thunderstore.io/c/valheim/p/MidnightMods/ValheimCommunityPatch/) prevented portals from connecting properly. This has been resolved in version 0.29.0 of that mod; please ensure you update if you use it.
 * **Game Shutdown & Placement Safety**: Cleaned up shutdown routines to prevent harmless errors on game exit and hardened piece placement checks.
 * **Dependency Updates**: Updated Jotunn to 2.30.2 and internal dependencies for stability.
-
-<details>
-<summary><b>2.0 Changelog History (Valheim Release)</b> (<i>click to expand</i>)</summary>
 
 ### 2.0.8 - Valheim 1.0.15 Alignment & Internalized Dependency Updates
 * **Valheim 1.0.15 Alignment**: Updated game assembly references and internalized `Vapok.Valheim.Common` 3.13.1015.

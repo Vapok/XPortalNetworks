@@ -1,3 +1,10 @@
+# 2.0.10 - Portal Connection Fix
+* **Portal Reconnection & Target Resolution (`Patches/ZDOMan.cs`)**:
+  * Resolved cross-session portal scrambling in `ZDOMan_ConnectPortals` by eliminating premature current-session ID collision check (`GetZDO(targetId)`).
+  * Built an $O(1)$ dictionary lookup (`portalsByPreviousId`) to resolve previous session target IDs directly against each portal's loaded `Key_PreviousId`.
+  * Expanded portal enumeration to `ZDOMan.instance.GetPortalList()` supplemented with `ZDOExtraData` connection IDs to ensure all loaded portals are captured.
+  * Ensured unresolvable targets are safely cleared (`ZDOID.None`) rather than attaching to mismatched runtime entities.
+
 # 2.0.9 - Dedicated Server UI Patch Hardening & Dependency Updates
 * **Dedicated Server Isolation (`Environment.cs`, `Patches/Patcher.cs`, `Patches/Dropdown.cs`)**:
   * Switched headless detection to `Jotunn.Managers.GUIManager.IsHeadless()` directly, removing `SystemInfo.graphicsDeviceType` in compliance with repository invariants.
