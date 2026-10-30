@@ -1,9 +1,15 @@
-# 2.0.14 - Dependency Updates & Valheim 1.0.20 Alignment
-* **Compatibility**: Updated internal dependencies for stability and Valheim 1.0.20 compatibility.
+# 2.0.15 - Valheim 1.0.21 Update & Portal Stability Fixes
+* **Portal UI & World Reload**: Fixed errors when closing the portal configuration panel quickly or reloading a world session.
+* **Documentation**: Added AI Mod Checker transparency audit disclosure to README.
+* **Compatibility**: Marked incompatible with NoPopUpsInMyValheim, and updated dependencies for Valheim 1.0.21 and BepInEx 5.4.2360.
 
 <details>
 <summary><b>2.0 Changelog History (Valheim Release)</b> (<i>click to expand</i>)</summary>
 
+
+
+### 2.0.14 - Dependency Updates & Valheim 1.0.20 Alignment
+* **Compatibility**: Updated internal dependencies for stability and Valheim 1.0.20 compatibility.
 
 ### 2.0.13 - UI Interaction & Font Warning Hardening
 * Fixed an issue where the portal selection window could become completely unresponsive to mouse clicks and controller input.

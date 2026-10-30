@@ -21,8 +21,15 @@ namespace XPortalNetworks
                 if (_isHeadless.HasValue)
                     return _isHeadless.Value;
 
-                _isHeadless = GUIManager.IsHeadless();
-                return _isHeadless.Value;
+                try
+                {
+                    _isHeadless = GUIManager.IsHeadless();
+                    return _isHeadless.Value;
+                }
+                catch
+                {
+                    return false;
+                }
             }
         }
 

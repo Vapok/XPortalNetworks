@@ -188,6 +188,24 @@ Use a mod manager like **r2modman** or **Thunderstore Mod Manager** to download 
 * ⚠️ **Integration Policy**: XPortalNetworks is a self-contained mod without a public API. Do not use reflection or Harmony patches on internal classes.
 * 💡 **Feature Requests**: If you need integration hooks or functionality, open a [Feature Request](https://github.com/Vapok/XPortalNetworks/issues) or reach out in our [Discord](https://discord.gg/5YAJkRFBXt).
 
+---
+
+## 🤖 AI Disclosure & Transparency Audit
+
+In accordance with mod store's various AI policies, below is the full transparency breakdown for **XPortalNetworks**:
+
+* **Audit Status**: `AI ASSISTED`
+* **Weighted LLM Score**: `22.4%`
+
+| Category | Evaluated Surface | LLM Score | Status |
+| :--- | :--- | :--- | :--- |
+| **C# Assembly & Logic** | Decompiled C# source (121 files) | `33.4%` | Approximately 33.4% of the C# codebase across 6 files exhibits LLM architectural idioms (such as null-coalesce empty fallbacks and splash dossier registrations) alongside human core logic. |
+| **Package Manifest & Structure** | Manifest, structure & icon (v2.0.15) | `0.0%` | Manifest configuration and package storefront icon.png are clean human desktop composites (8192-byte IDAT blocks from image editor). |
+| **Documentation & Copywriting** | Package documentation (12255 chars) | `45.0%` | README.md presents a structured layout with badges, standard tables, and organized bulleting typical of LLM-assisted documentation polishing. |
+| **Visual & Audio Media** | In-package Unity & media assets | `0.0%` | Pure code plugin containing zero in-package UnityFS AssetBundles, embedded textures, or audio assets. |
+
+---
+
 ## 🔒 Anonymous Telemetry, Error Reporting & Privacy
 
 XPortalNetworks includes lightweight, privacy-first telemetry and error reporting to help monitor mod stability, diagnose unhandled bugs, and track active version adoption across game updates.
