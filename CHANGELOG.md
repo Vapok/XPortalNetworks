@@ -1,7 +1,7 @@
 # 2.0.15 - Valheim 1.0.21 Update & Portal Stability Fixes
 * **Portal UI & World Reload**: Fixed errors when closing the portal configuration panel quickly or reloading a world session.
 * **Documentation**: Added AI transparency audit disclosure to README.
-* **Compatibility**: Marked incompatible with NoPopUpsInMyValheim, and updated dependencies for Valheim 1.0.21 and BepInEx 5.4.2360.
+* **Compatibility**: Updated dependencies for Valheim 1.0.21 and BepInEx 5.4.2360.
 
 <details>
 <summary><b>2.0 Changelog History (Valheim Release)</b> (<i>click to expand</i>)</summary>
