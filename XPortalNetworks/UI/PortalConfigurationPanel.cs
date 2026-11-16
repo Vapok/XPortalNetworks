@@ -741,7 +741,10 @@ namespace XPortalNetworks.UI
                 return;
             }
 
-            portalNameInputField.ActivateInputField();
+            if (portalNameInputField != null && IsActive())
+            {
+                portalNameInputField.ActivateInputField();
+            }
         }
 
         public void Show()

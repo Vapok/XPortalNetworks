@@ -21,7 +21,7 @@ namespace XPortalNetworks
     [BepInDependency(Jotunn.Main.ModGuid)]
     [BepInDependency(LegacyCompatibility.LegacyXPortalPluginGuid, BepInDependency.DependencyFlags.SoftDependency)]
     [NetworkCompatibility(CompatibilityLevel.EveryoneMustHaveMod, VersionStrictness.Patch)]
-    public class XPortalNetworks : BaseUnityPlugin, IPluginInfo
+    public class XPortalNetworks : VapokModBase, IPluginInfo
     {
         public static XPortalNetworks PluginInstance { get; private set; }
 

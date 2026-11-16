@@ -32,20 +32,36 @@ namespace XPortalNetworks.RPC
                 return;
             }
 
-            // Server RPCs
-            ZRoutedRpc.instance.Register(RPC_SYNCPORTAL, new Action<long, ZPackage>(Client.ClientEvents.RPC_SyncPortal));
-            ZRoutedRpc.instance.Register(RPC_RESYNC, new Action<long, ZPackage, string>(Client.ClientEvents.RPC_Resync));
-            ZRoutedRpc.instance.Register(RPC_CONFIG, new Action<long, ZPackage>(Client.ClientEvents.RPC_Config));
-            ZRoutedRpc.instance.Register(RPC_CUSTOMNETWORKS, new Action<long, ZPackage>(Client.ClientEvents.RPC_CustomNetworks));
-            ZRoutedRpc.instance.Register(RPC_ADMINSYNC, new Action<long, ZPackage>(Client.ClientEvents.RPC_AdminSync));
+            RegisterSafe(RPC_SYNCPORTAL, new Action<long, ZPackage>(Client.ClientEvents.RPC_SyncPortal));
+            RegisterSafe(RPC_RESYNC, new Action<long, ZPackage, string>(Client.ClientEvents.RPC_Resync));
+            RegisterSafe(RPC_CONFIG, new Action<long, ZPackage>(Client.ClientEvents.RPC_Config));
+            RegisterSafe(RPC_CUSTOMNETWORKS, new Action<long, ZPackage>(Client.ClientEvents.RPC_CustomNetworks));
+            RegisterSafe(RPC_ADMINSYNC, new Action<long, ZPackage>(Client.ClientEvents.RPC_AdminSync));
 
-            // Client RPCs
-            ZRoutedRpc.instance.Register(RPC_SYNCREQUEST, new Action<long, string>(Server.ServerEvents.RPC_SyncRequest));
-            ZRoutedRpc.instance.Register(RPC_ADDORUPDATEREQUEST, new Action<long, ZPackage>(Server.ServerEvents.RPC_AddOrUpdateRequest));
-            ZRoutedRpc.instance.Register(RPC_REMOVEREQUEST, new Action<long, ZDOID>(Server.ServerEvents.RPC_RemoveRequest));
-            ZRoutedRpc.instance.Register(RPC_CONFIGREQUEST, new Action<long>(Server.ServerEvents.RPC_ConfigRequest));
-            ZRoutedRpc.instance.Register(RPC_REQUESTCUSTOMNETWORKS, new Action<long>(Server.ServerEvents.RPC_RequestCustomNetworks));
-            ZRoutedRpc.instance.Register(RPC_REQUESTADMINSYNC, new Action<long, ZPackage>(Server.ServerEvents.RPC_RequestAdminSync));
+            RegisterSafe(RPC_SYNCREQUEST, new Action<long, string>(Server.ServerEvents.RPC_SyncRequest));
+            RegisterSafe(RPC_ADDORUPDATEREQUEST, new Action<long, ZPackage>(Server.ServerEvents.RPC_AddOrUpdateRequest));
+            RegisterSafe(RPC_REMOVEREQUEST, new Action<long, ZDOID>(Server.ServerEvents.RPC_RemoveRequest));
+            RegisterSafe(RPC_CONFIGREQUEST, new Action<long>(Server.ServerEvents.RPC_ConfigRequest));
+            RegisterSafe(RPC_REQUESTCUSTOMNETWORKS, new Action<long>(Server.ServerEvents.RPC_RequestCustomNetworks));
+            RegisterSafe(RPC_REQUESTADMINSYNC, new Action<long, ZPackage>(Server.ServerEvents.RPC_RequestAdminSync));
+        }
+
+        private static void RegisterSafe(string name, Action<long> action)
+        {
+            ZRoutedRpc.instance.m_functions.Remove(name.GetStableHashCode());
+            ZRoutedRpc.instance.Register(name, action);
+        }
+
+        private static void RegisterSafe<T>(string name, Action<long, T> action)
+        {
+            ZRoutedRpc.instance.m_functions.Remove(name.GetStableHashCode());
+            ZRoutedRpc.instance.Register(name, action);
+        }
+
+        private static void RegisterSafe<T, U>(string name, Action<long, T, U> action)
+        {
+            ZRoutedRpc.instance.m_functions.Remove(name.GetStableHashCode());
+            ZRoutedRpc.instance.Register(name, action);
         }
     }
 }
