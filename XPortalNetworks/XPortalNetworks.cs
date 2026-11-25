@@ -219,7 +219,6 @@ namespace XPortalNetworks
         #endregion
 
         #region Patch Events
-        /// <summary>Game start: reset state and register RPCs.</summary>
         internal static void GameStarted()
         {
             KnownPortalsManager.Instance.Reset();
